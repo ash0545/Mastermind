@@ -1,117 +1,33 @@
-module Analyzer
-  def exact_match(array, comp_array) # returns array with true for exact matches
-    i = -1
-    array.map do |element|
-      i += 1
-      element == comp_array[i]
-    end
-  end
+# frozen_string_literal: true
 
-  def match(array, comp_array)
-    exact = exact_match(array, comp_array)
-    i = -1
-    rem_exact = array.reject do |element|
-      i += 1
-      exact[i]
-    end
-    matches = 0
-    rem_exact.each do |element|
-      matches += 1 if comp_array.include?(element)
-    end
-    matches
-  end
-end
+require './player'
+require './human'
+require './computer'
 
+# Main class which plays the game
 class Game
-
   GUESSES = 6
-  VALID_INTS = [1, 2, 3, 4, 5, 6]
+  VALID_INTS = [1, 2, 3, 4, 5, 6].freeze
 
   def initialize(setter_class, breaker_class)
-    @code_maker = setter_class.new()
-    @code_breaker = breaker_class.new()
-    @player = Player.new()
+    @code_maker = setter_class.new
+    @code_breaker = breaker_class.new
+    @player = Player.new
   end
 
   def play
     i = 1
     code = 0
-    while i <= GUESSES do
+    while i <= GUESSES
       if i == 1
-        puts "Welcome to Mastermind!"
+        puts 'Welcome to Mastermind!'
         code = @player.setter(@code_maker, VALID_INTS)
       end
       @player.breaker(@code_breaker, VALID_INTS, code, i)
       i += 1
     end
     puts "The code was #{code.join('')}"
-    puts "Thanks for playing!"
-  end
-end
-
-class Player
-
-  include Analyzer
-
-  def initialize()
-
-  end
-
-  def setter(player, valid_ints)
-    puts "Valid numbers: #{valid_ints}"
-    player.set(valid_ints, 4)
-  end
-
-  def breaker(player, valid_ints, code, guess_no)
-    puts "Enter guess ##{guess_no}: "
-    player.break(valid_ints, code, 4)
-  end
-
-  private
-  def get_valid_code(code, length, valid_ints)
-    code_array = code.split('').map {|element| element.to_i}
-    until code.length == length && code_array.all? {|element| valid_ints.include?(element)} do
-      puts "Enter valid code: "
-      code = gets.chomp
-      code_array = code.split('').map {|element| element.to_i}
-    end
-    code_array
-  end
-end
-
-class Human < Player # All inputs from user
-  def set(valid_ints, length)
-    puts "Enter your secret code: "
-    code = gets.chomp
-    get_valid_code(code, length, valid_ints)
-  end
-
-  def break(valid_ints, code, length)
-    guess = gets.chomp
-    valid_guess = get_valid_code(guess, length, valid_ints)
-    exact_matches = exact_match(valid_guess, code).count(true)
-    matches = match(valid_guess, code)
-    puts "There are #{exact_matches} exact matches and #{matches} matches."
-  end
-end
-
-class Computer < Player # All automatic inputs
-  def set(valid_ints, length)
-    puts "Computer has set the code!"
-    random_code_gen(valid_ints, length)
-  end
-
-  def break()
-
-  end
-
-  private
-  def random_code_gen(valid_ints, length)
-    return valid_ints.shuffle.slice(0,length)
-  end
-
-  def guess_logic()
-
+    puts 'Thanks for playing!'
   end
 end
 
