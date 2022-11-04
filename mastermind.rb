@@ -22,8 +22,9 @@ class Player
     @game = game
   end
 
-  def setter(player)
-    player.set
+  def setter(player, valid_ints)
+    puts "Valid numbers: #{valid_ints}"
+    player.set(valid_ints, 4)
   end
 
   def breaker(player, total_guesses)
@@ -34,8 +35,16 @@ class Player
 end
 
 class Human < Player # All inputs from user
-  def set()
-
+  def set(valid_ints, length)
+    puts "Enter your secret code: "
+    code = gets.chomp
+    code_array = code.split('').map {|element| element.to_i}
+    until code.length == length && code_array.all? {|element| valid_ints.include?(element)} do
+      puts "Enter valid code: "
+      code = gets.chomp
+      code_array = code.split('').map {|element| element.to_i}
+    end
+    code_array
   end
 
   def break()
@@ -44,8 +53,9 @@ class Human < Player # All inputs from user
 end
 
 class Computer < Player # All automatic inputs
-  def set()
-
+  def set(valid_ints, length)
+    puts "Computer has set the code!"
+    random_code_gen(valid_ints, length)
   end
 
   def break()
