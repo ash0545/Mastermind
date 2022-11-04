@@ -22,14 +22,36 @@ class Player
   def initialize(game)
     @game = game
   end
+
+  def setter(player)
+    player.set
+  end
+
+  def breaker(player, total_guesses)
+    for i in 1..total_guesses do
+      puts "Enter guess ##{i}: "
+      player.break
+  end
 end
 
 class Human < Player # All inputs from user
-  
+  def set()
+
+  end
+
+  def break()
+
+  end
 end
 
 class Computer < Player # All automatic inputs
+  def set()
 
+  end
+
+  def break()
+
+  end
 end
 
 module Analyzer
