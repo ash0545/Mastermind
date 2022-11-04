@@ -27,8 +27,6 @@ class Game
   GUESSES = 6
   VALID_INTS = [1, 2, 3, 4, 5, 6]
 
-  include Analyzer
-
   def initialize(setter_class, breaker_class)
     @code_maker = setter_class.new()
     @code_breaker = breaker_class.new()
@@ -37,21 +35,24 @@ class Game
 
   def play
     i = 1
+    code = 0
     while i <= GUESSES do
       if i == 1
         puts "Welcome to Mastermind!"
         code = @player.setter(@code_maker, VALID_INTS)
-        @player.breaker(@code_breaker, VALID_INTS, i)
-      else
-        @player.breaker(@code_breaker, VALID_INTS, i)
       end
+      @player.breaker(@code_breaker, VALID_INTS, code, i)
       i += 1
     end
+    puts "The code was #{code.join('')}"
     puts "Thanks for playing!"
   end
 end
 
 class Player
+
+  include Analyzer
+
   def initialize()
 
   end
@@ -61,9 +62,9 @@ class Player
     player.set(valid_ints, 4)
   end
 
-  def breaker(player, valid_ints, guess_no)
+  def breaker(player, valid_ints, code, guess_no)
     puts "Enter guess ##{guess_no}: "
-    player.break(valid_ints, 4)
+    player.break(valid_ints, code, 4)
   end
 
   private
@@ -85,9 +86,12 @@ class Human < Player # All inputs from user
     get_valid_code(code, length, valid_ints)
   end
 
-  def break(valid_ints, length)
+  def break(valid_ints, code, length)
     guess = gets.chomp
-    get_valid_code(guess, length, valid_ints)
+    valid_guess = get_valid_code(guess, length, valid_ints)
+    exact_matches = exact_match(valid_guess, code).count(true)
+    matches = match(valid_guess, code)
+    puts "There are #{exact_matches} exact matches and #{matches} matches."
   end
 end
 
