@@ -1,7 +1,6 @@
 class Game
 
   GUESSES = 6
-  CODE = 1234
 
   def initialize(setter_class, breaker_class)
     @setter = setter_class.new()
@@ -50,6 +49,15 @@ class Computer < Player # All automatic inputs
   end
 
   def break()
+
+  end
+
+  private
+  def random_code_gen(valid_ints, length)
+    return valid_ints.shuffle.slice(0,length)
+  end
+
+  def guess_logic()
 
   end
 end
