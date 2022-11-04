@@ -1,25 +1,34 @@
 class Game
 
   GUESSES = 6
+  VALID_INTS = [1, 2, 3, 4, 5, 6]
+
+  include Analyzer
 
   def initialize(setter_class, breaker_class)
-    @setter = setter_class.new()
-    @breaker = breaker_class.new()
+    @code_maker = setter_class.new()
+    @code_breaker = breaker_class.new()
+    @player = Player.new()
   end
 
   def play
     i = 1
     while i <= GUESSES do
-      puts "Welcome to Mastermind!" if i == 1
-      
+      if i == 1
+        puts "Welcome to Mastermind!"
+        code = player.setter(code_maker, VALID_INTS)
+      else
+
+      end
+
       i += 1
     end
   end
 end
 
 class Player
-  def initialize(game)
-    @game = game
+  def initialize()
+
   end
 
   def setter(player, valid_ints)
