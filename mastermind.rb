@@ -16,13 +16,14 @@ class Game
     while i <= GUESSES do
       if i == 1
         puts "Welcome to Mastermind!"
-        code = player.setter(code_maker, VALID_INTS)
+        code = player.setter(@code_maker, VALID_INTS)
+        player.breaker(@code_breaker, GUESSES, i)
       else
-
+        player.breaker(@code_breaker, GUESSES, i)
       end
-
       i += 1
     end
+    puts "Thanks for playing!"
   end
 end
 
@@ -36,17 +37,13 @@ class Player
     player.set(valid_ints, 4)
   end
 
-  def breaker(player, total_guesses)
-    for i in 1..total_guesses do
-      puts "Enter guess ##{i}: "
-      player.break
+  def breaker(player, total_guesses, guess_no)
+    puts "Enter guess ##{guess_no}: "
+    player.break
   end
-end
 
-class Human < Player # All inputs from user
-  def set(valid_ints, length)
-    puts "Enter your secret code: "
-    code = gets.chomp
+  private
+  def get_valid_code(code, length, valid_ints)
     code_array = code.split('').map {|element| element.to_i}
     until code.length == length && code_array.all? {|element| valid_ints.include?(element)} do
       puts "Enter valid code: "
@@ -55,9 +52,18 @@ class Human < Player # All inputs from user
     end
     code_array
   end
+end
 
-  def break()
+class Human < Player # All inputs from user
+  def set(valid_ints, length)
+    puts "Enter your secret code: "
+    code = gets.chomp
+    get_valid_code(code, length, valid_ints)
+  end
 
+  def break(valid_ints, length)
+    guess = gets.chomp
+    get_valid_code(guess, length, valid_ints)
   end
 end
 
