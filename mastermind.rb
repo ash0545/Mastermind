@@ -1,3 +1,27 @@
+module Analyzer
+  def exact_match(array, comp_array) # returns array with true for exact matches
+    i = -1
+    array.map do |element|
+      i += 1
+      element == comp_array[i]
+    end
+  end
+
+  def match(array, comp_array)
+    exact = exact_match(array, comp_array)
+    i = -1
+    rem_exact = array.reject do |element|
+      i += 1
+      exact[i]
+    end
+    matches = 0
+    rem_exact.each do |element|
+      matches += 1 if comp_array.include?(element)
+    end
+    matches
+  end
+end
+
 class Game
 
   GUESSES = 6
@@ -16,10 +40,10 @@ class Game
     while i <= GUESSES do
       if i == 1
         puts "Welcome to Mastermind!"
-        code = player.setter(@code_maker, VALID_INTS)
-        player.breaker(@code_breaker, GUESSES, i)
+        code = @player.setter(@code_maker, VALID_INTS)
+        @player.breaker(@code_breaker, VALID_INTS, i)
       else
-        player.breaker(@code_breaker, GUESSES, i)
+        @player.breaker(@code_breaker, VALID_INTS, i)
       end
       i += 1
     end
@@ -37,9 +61,9 @@ class Player
     player.set(valid_ints, 4)
   end
 
-  def breaker(player, total_guesses, guess_no)
+  def breaker(player, valid_ints, guess_no)
     puts "Enter guess ##{guess_no}: "
-    player.break
+    player.break(valid_ints, 4)
   end
 
   private
@@ -84,30 +108,6 @@ class Computer < Player # All automatic inputs
 
   def guess_logic()
 
-  end
-end
-
-module Analyzer
-  def exact_match(array, comp_array) # returns array with true for exact matches
-    i = -1
-    array.map do |element|
-      i += 1
-      element == comp_array[i]
-    end
-  end
-
-  def match(array, comp_array)
-    exact = exact_match(array, comp_array)
-    i = -1
-    rem_exact = array.reject do |element|
-      i += 1
-      exact[i]
-    end
-    matches = 0
-    rem_exact.each do |element|
-      matches += 1 if comp_array.include?(element)
-    end
-    matches
   end
 end
 
