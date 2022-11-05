@@ -12,13 +12,18 @@ module Analyzer
   def match(array, comp_array)
     exact = exact_match(array, comp_array)
     i = -1
-    rem_exact = array.reject do
+    rem_exact = array.filter do
       i += 1
-      exact[i]
+      !exact[i]
+    end
+    i = -1
+    new_comp_array = comp_array.filter do
+      i += 1
+      !exact[i]
     end
     matches = 0
     rem_exact.each do |element|
-      matches += 1 if comp_array.include?(element)
+      matches += 1 if new_comp_array.include?(element)
     end
     matches
   end

@@ -21,6 +21,7 @@ class Game
     while i <= GUESSES
       if i == 1
         puts 'Welcome to Mastermind!'
+        puts "Exact match: Correct number in the correct position\nMatch: Number exists in code (not exact match)"
         code = @player.setter(@code_maker, VALID_INTS)
       end
       @player.breaker(@code_breaker, VALID_INTS, code, i)
