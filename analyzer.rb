@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # For analyzing how many matches and exact matches are present between two arrays
 module Analyzer
   # returns array with true for exact matches
@@ -21,10 +23,7 @@ module Analyzer
       i += 1
       !exact[i]
     end
-    matches = 0
-    rem_exact.each do |element|
-      matches += 1 if new_comp_array.include?(element)
-    end
-    matches
+    matches = rem_exact.filter { |element| new_comp_array.include?(element) }
+    matches.uniq.length
   end
 end
